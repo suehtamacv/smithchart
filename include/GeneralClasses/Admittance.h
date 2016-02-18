@@ -7,11 +7,26 @@ class Impedance;
 
 class Admittance
 {
+    friend class Impedance;
+
 public:
     Admittance(std::complex<double> admittance);
     Admittance(double Abs, double Theta);
+    Admittance(const Admittance &other);
+    Admittance(const Impedance &other);
 
-    Impedance toImpedance();
+    Impedance toImpedance() const;
+
+    Admittance operator -() const;
+
+    Admittance& operator+=(const Admittance &other);
+    Admittance& operator+=(const Impedance &other);
+    Admittance& operator-=(const Admittance &other);
+    Admittance& operator-=(const Impedance &other);
+
+    Admittance operator+(const Admittance &other) const;
+    Admittance operator-(const Admittance &other) const;
+
 
 private:
     std::complex<double> admittance;
