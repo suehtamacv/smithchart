@@ -14,12 +14,14 @@ LIBS += -lboost_system -lboost_program_options -larmadillo
 
 HEADERS += \
     include/GeneralClasses/Impedance.h \
-    include/GeneralClasses/Admittance.h
+    include/GeneralClasses/Admittance.h \
+    include/MoebiusTranformations/MoebiusTransformation.h
 
 SOURCES += \
     src/GeneralClasses/Impedance.cpp \
     src/GeneralClasses/Admittance.cpp \
-    main.cpp
+    main.cpp \
+    src/MoebiusTranformations/MoebiusTransformation.cpp
 
 OTHER_FILES += \
     .astylerc

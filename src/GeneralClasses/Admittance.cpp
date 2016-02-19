@@ -1,7 +1,7 @@
 #include "include/GeneralClasses/Admittance.h"
 #include "include/GeneralClasses/Impedance.h"
 
-Admittance::Admittance(std::complex<double> admittance) :
+Admittance::Admittance(complex admittance) :
     admittance(admittance)
 {
 

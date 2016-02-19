@@ -3,6 +3,8 @@
 
 #include <complex>
 
+typedef std::complex<double> complex;
+
 class Impedance;
 
 class Admittance
@@ -10,7 +12,7 @@ class Admittance
     friend class Impedance;
 
 public:
-    Admittance(std::complex<double> admittance);
+    Admittance(complex admittance);
     Admittance(double Abs, double Theta);
     Admittance(const Admittance &other);
     Admittance(const Impedance &other);

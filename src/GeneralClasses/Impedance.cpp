@@ -1,7 +1,7 @@
 #include "include/GeneralClasses/Impedance.h"
 #include "include/GeneralClasses/Admittance.h"
 
-Impedance::Impedance(std::complex<double> impedance) :
+Impedance::Impedance(complex impedance) :
     impedance(impedance)
 {
 
