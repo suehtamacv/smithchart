@@ -56,3 +56,8 @@ Impedance Impedance::operator -(const Impedance &other) const
 {
     return Impedance(impedance - other.impedance);
 }
+
+complex Impedance::getImpedance() const
+{
+    return impedance;
+}

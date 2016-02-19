@@ -19,9 +19,9 @@ class MoebiusTransformation
 public:
     MoebiusTransformation(complex a, complex b, complex c, complex d);
 
-    complex transform(complex z);
+    complex transform(const complex &z) const;
 
-    MoebiusTransformation inverse();
+    MoebiusTransformation inverse() const;
 
 private:
     complex a;

@@ -68,3 +68,8 @@ Admittance Admittance::operator -(const Admittance &other) const
 {
     return Admittance(admittance - other.admittance);
 }
+
+complex Admittance::getAdmittance() const
+{
+    return admittance;
+}

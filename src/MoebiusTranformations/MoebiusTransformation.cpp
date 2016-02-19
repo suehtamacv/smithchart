@@ -9,12 +9,12 @@ MoebiusTransformation::MoebiusTransformation
         }
 }
 
-MoebiusTransformation MoebiusTransformation::inverse()
+MoebiusTransformation MoebiusTransformation::inverse() const
 {
     return MoebiusTransformation(d, -b, -c, a);
 }
 
-complex MoebiusTransformation::transform(complex z)
+complex MoebiusTransformation::transform(const complex &z) const
 {
     return (a * z + b) / (c * z + d);
 }

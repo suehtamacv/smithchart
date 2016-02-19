@@ -7,6 +7,9 @@ typedef std::complex<double> complex;
 
 class Impedance;
 
+/**
+ * @brief The Admittance class represents an admittance, measured in Siemens (S).
+ */
 class Admittance
 {
     friend class Impedance;
@@ -29,9 +32,10 @@ public:
     Admittance operator+(const Admittance &other) const;
     Admittance operator-(const Admittance &other) const;
 
+    complex getAdmittance() const;
 
 private:
-    std::complex<double> admittance;
+    complex admittance;
 };
 
 #endif // ADMITTANCE_H

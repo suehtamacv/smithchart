@@ -15,13 +15,15 @@ LIBS += -lboost_system -lboost_program_options -larmadillo
 HEADERS += \
     include/GeneralClasses/Impedance.h \
     include/GeneralClasses/Admittance.h \
-    include/MoebiusTranformations/MoebiusTransformation.h
+    include/MoebiusTranformations/MoebiusTransformation.h \
+    include/MoebiusTranformations/SmithChartTransformation.h
 
 SOURCES += \
     src/GeneralClasses/Impedance.cpp \
     src/GeneralClasses/Admittance.cpp \
     main.cpp \
-    src/MoebiusTranformations/MoebiusTransformation.cpp
+    src/MoebiusTranformations/MoebiusTransformation.cpp \
+    src/MoebiusTranformations/SmithChartTransformation.cpp
 
 OTHER_FILES += \
     .astylerc

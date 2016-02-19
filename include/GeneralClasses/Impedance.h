@@ -27,8 +27,10 @@ public:
     Impedance operator+(const Impedance &other) const;
     Impedance operator-(const Impedance &other) const;
 
+    complex getImpedance() const;
+
 private:
-    std::complex<double> impedance;
+    complex impedance;
 };
 
 #endif // IMPEDANCE_H
