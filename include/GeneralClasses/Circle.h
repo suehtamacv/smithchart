@@ -1,8 +1,9 @@
-#ifndef CIRCLESEGMENT_H
-#define CIRCLESEGMENT_H
+#ifndef CIRCLE_H
+#define CIRCLE_H
 
 #include <complex>
 #include <vector>
+
 #define PI 3.141592653589793238462643383279502884L
 
 typedef std::complex<double> complex;
@@ -24,4 +25,4 @@ private:
     void createPoints();
 };
 
-#endif // CIRCLESEGMENT_H
+#endif // CIRCLE_H
