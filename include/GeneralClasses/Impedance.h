@@ -26,8 +26,8 @@ public:
 
     Impedance operator+(const Impedance &other) const;
     Impedance operator-(const Impedance &other) const;
-
-    complex getImpedance() const;
+    complex operator/(const Impedance &other) const;
+    bool operator==(const Impedance &other) const;
 
 private:
     complex impedance;

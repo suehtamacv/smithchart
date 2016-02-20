@@ -31,8 +31,8 @@ public:
 
     Admittance operator+(const Admittance &other) const;
     Admittance operator-(const Admittance &other) const;
-
-    complex getAdmittance() const;
+    complex operator/(const Admittance &other) const;
+    bool operator==(const Admittance &other) const;
 
 private:
     complex admittance;

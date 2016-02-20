@@ -1,17 +1,28 @@
 #include "include/MoebiusTranformations/SmithChartTransformation.h"
 #include "include/GeneralClasses/Admittance.h"
-#include "include/GeneralClasses/Impedance.h"
 #include "boost/assert.hpp"
 
-SmithChartTransformation::SmithChartTransformation() :
-    MoebiusTransformation(1, 1, -1, 1)
+SmithChartTransformation::SmithChartTransformation
+(Impedance characteristicImpedance) :
+    MoebiusTransformation(1, 1, -1, 1),
+    characteristicImpedance(characteristicImpedance)
+{
+    if (characteristicImpedance == Impedance(0))
+        {
+        characteristicImpedance = Impedance(1);
+        }
+}
+
+SmithChartTransformation::SmithChartTransformation
+(Admittance characteristicAdmittance) :
+    SmithChartTransformation(characteristicAdmittance.toImpedance())
 {
 
 }
 
 complex SmithChartTransformation::findPoint(const Impedance &impedance) const
 {
-    return transform(impedance.getImpedance());
+    return transform(impedance / characteristicImpedance);
 }
 
 complex SmithChartTransformation::findPoint(const Admittance &admittance) const
