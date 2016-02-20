@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <QWidget>
+#include <QPainter>
 
 class SmithChart : public QWidget
 {
@@ -13,6 +14,9 @@ public:
 
 private:
     void setupInterface();
+    void paintEvent(QPaintEvent *);
+
+    void drawSmithChart();
 };
 
 #endif // SMITHCHART_H
