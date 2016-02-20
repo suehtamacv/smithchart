@@ -1,6 +1,7 @@
 #include "include/SmithChart/SmithChart.h"
 #include "include/GeneralClasses/Impedance.h"
 #include "include/GeneralClasses/Admittance.h"
+#include "include/GeneralClasses/Circle.h"
 #include <QLayout>
 
 SmithChart::SmithChart(Impedance Z0, QWidget *parent) :
@@ -70,10 +71,37 @@ void SmithChart::drawSmithChart(QPainter *painter)
 
     painter->setRenderHint(QPainter::Antialiasing, true);
 
-    chartRadius = std::round(0.45 * std::min(
-                                 chart->rect().height(), chart->rect().width()));
+    chartRadius =
+        std::round(0.45 * std::min(chart->rect().height(), chart->rect().width()));
+    QPainterPath chartBoundary(chart->rect().center());
+    chartBoundary.addEllipse(QPoint(0, 0), chartRadius, chartRadius);
 
-    painter->drawEllipse(QPoint(0, 0), chartRadius, chartRadius);
+    painter->drawPath(chartBoundary);
+    painter->setClipPath(chartBoundary);
+
+    std::vector<double> values;
+    povoateChartValues(values);
+
+    for (auto r : values)
+        {
+        auto circ = Circle(r / (r + 1.0), 1.0 / (r + 1.0)) * chartRadius;
+        painter->drawEllipse(QPointF(circ.x(), circ.y()), circ.radius(), circ.radius());
+        }
+
+    for (auto x : values)
+        {
+        if (x == 0)
+            {
+            continue;
+            }
+
+        auto circ = Circle(complex(1, 1.0 / x), 1.0 / x) * chartRadius;
+        painter->drawEllipse(QPointF(circ.x(), circ.y()), circ.radius(), circ.radius());
+        circ = Circle(complex(1, - 1.0 / x), 1.0 / x) * chartRadius;
+        painter->drawEllipse(QPointF(circ.x(), circ.y()), circ.radius(), circ.radius());
+        }
+
+    painter->drawLine(-chartRadius, 0, chartRadius, 0);
 }
 
 void SmithChart::drawImpedance(const Impedance &impedance)
@@ -96,5 +124,50 @@ void SmithChart::drawImpedances(QPainter *painter)
         z *= chartRadius;
 
         painter->drawPoint(QPoint(z.real(), z.imag()));
+        }
+}
+
+void SmithChart::povoateChartValues(std::vector<double> &vals)
+{
+    vals.clear();
+
+    for (double val = 0; val < 0.2; val += 0.01)
+        {
+        vals.push_back(val);
+        }
+
+    for (double val = 0.2; val < 0.5; val += 0.02)
+        {
+        vals.push_back(val);
+        }
+
+    for (double val = 0.5; val < 1.0; val += 0.05)
+        {
+        vals.push_back(val);
+        }
+
+    for (double val = 1.0; val < 2.0; val += 0.1)
+        {
+        vals.push_back(val);
+        }
+
+    for (double val = 2.0; val < 5.0; val += 0.2)
+        {
+        vals.push_back(val);
+        }
+
+    for (double val = 5.0; val < 10.0; val += 1.0)
+        {
+        vals.push_back(val);
+        }
+
+    for (double val = 10.0; val < 20.0; val += 2.0)
+        {
+        vals.push_back(val);
+        }
+
+    for (double val = 20.0; val <= 50.0; val += 10.0)
+        {
+        vals.push_back(val);
         }
 }

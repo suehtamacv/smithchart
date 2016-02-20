@@ -8,7 +8,7 @@ Circle::Circle(complex center, double radius) :
 
 Circle::Circle
 (complex center, double radius, double initialPhase, double finalPhase) :
-    center(center), radius(radius),
+    center(center), rad(radius),
     initialPhase(initialPhase), finalPhase(finalPhase)
 {
     if (radius <= 0)
@@ -29,6 +29,6 @@ void Circle::createPoints()
     double phaseStep = fabs(finalPhase - initialPhase) / numCirclePoints;
     for (double phase = initialPhase; phase <= finalPhase; phase += phaseStep)
         {
-        CirclePoints.push_back(std::polar(radius, phase));
+        CirclePoints.push_back(std::polar(rad, phase));
         }
 }

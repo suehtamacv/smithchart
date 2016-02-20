@@ -11,16 +11,36 @@ typedef std::complex<double> complex;
 class Circle
 {
 public:
-    Circle(complex center, double radius);
-    Circle(complex center, double radius, double initialPhase, double finalPhase);
+    Circle(complex center, double rad);
+    Circle(complex center, double rad, double initialPhase, double finalPhase);
+
+    Circle operator *(double k)
+    {
+        return Circle(k * center, k * rad, initialPhase, finalPhase);
+    }
+
+    inline double x()
+    {
+        return center.real();
+    }
+
+    inline double y()
+    {
+        return center.imag();
+    }
+
+    inline double radius()
+    {
+        return rad;
+    }
 
 private:
     complex center;
-    double radius;
+    double rad;
     double initialPhase;
     double finalPhase;
 
-    static constexpr unsigned int numCirclePoints = 200;
+    static constexpr unsigned int numCirclePoints = 500;
     std::vector<complex> CirclePoints;
     void createPoints();
 };

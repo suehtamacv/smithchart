@@ -9,9 +9,11 @@
 #include <QPicture>
 #include <QWidget>
 #include "include/GeneralClasses/Impedance.h"
+#include "include/GeneralClasses/Circle.h"
 #include "include/MoebiusTranformations/SmithChartTransformation.h"
 
 class Admitttance;
+class Circle;
 
 typedef std::complex<double> complex;
 
@@ -43,6 +45,8 @@ private:
 
     void drawSmithChart(QPainter *painter);
     void drawImpedances(QPainter *painter);
+
+    void povoateChartValues(std::vector<double> &);
 };
 
 #endif // SMITHCHART_H
