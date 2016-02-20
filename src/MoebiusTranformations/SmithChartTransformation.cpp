@@ -28,7 +28,5 @@ Impedance SmithChartTransformation::findImpedance(complex &z) const
 
 Admittance SmithChartTransformation::findAdmittance(complex &z) const
 {
-    BOOST_ASSERT_MSG(abs(z) <= 1, "Point not in the Smith Chart: its absolute"
-                     " value is greater than 1.");
     return findImpedance(z).toAdmittance();
 }

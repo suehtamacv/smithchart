@@ -16,14 +16,16 @@ HEADERS += \
     include/GeneralClasses/Impedance.h \
     include/GeneralClasses/Admittance.h \
     include/MoebiusTranformations/MoebiusTransformation.h \
-    include/MoebiusTranformations/SmithChartTransformation.h
+    include/MoebiusTranformations/SmithChartTransformation.h \
+    include/GeneralClasses/Circle.h
 
 SOURCES += \
     src/GeneralClasses/Impedance.cpp \
     src/GeneralClasses/Admittance.cpp \
     main.cpp \
     src/MoebiusTranformations/MoebiusTransformation.cpp \
-    src/MoebiusTranformations/SmithChartTransformation.cpp
+    src/MoebiusTranformations/SmithChartTransformation.cpp \
+    src/GeneralClasses/Circle.cpp
 
 OTHER_FILES += \
     .astylerc
