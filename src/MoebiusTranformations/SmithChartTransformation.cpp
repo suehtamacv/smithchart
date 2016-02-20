@@ -4,7 +4,7 @@
 
 SmithChartTransformation::SmithChartTransformation
 (Impedance characteristicImpedance) :
-    MoebiusTransformation(1, 1, -1, 1),
+    MoebiusTransformation(1, -1, 1, 1),
     characteristicImpedance(characteristicImpedance)
 {
     if (characteristicImpedance == Impedance(0))
