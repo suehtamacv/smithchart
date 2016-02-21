@@ -210,7 +210,7 @@ void SmithChart::drawLabels(QPainter *painter)
     painter->setRenderHint(QPainter::Antialiasing, true);
     painter->setClipping(false);
 
-    painter->drawEllipse(QPointF(0, 0), chartRadius * 1.1, chartRadius * 1.1);
+    painter->drawEllipse(QPointF(0, 0), chartRadius * 1.06, chartRadius * 1.06);
 
     QFont font = painter->font();
     font.setPixelSize(8);
@@ -231,4 +231,22 @@ void SmithChart::drawLabels(QPainter *painter)
                           QPointF(0, font.pixelSize()), QString::number(r));
         }
     painter->rotate(90);
+
+    for (auto x : labels)
+        {
+        if (x == 0)
+            {
+            continue;
+            }
+
+        complex pos = complex(chartRadius, chartRadius * 1.0 / x);
+        painter->rotate(-2 * std::arg(pos) * 180 / PI);
+        painter->drawText(QPointF(1.01 * chartRadius, 0), QString::number(x));
+        painter->rotate(2 * std::arg(pos) * 180 / PI);
+
+        pos = complex(chartRadius, chartRadius * (-1.0 / x));
+        painter->rotate(-2 * std::arg(pos) * 180 / PI);
+        painter->drawText(QPointF(1.01 * chartRadius, 0), QString::number(x));
+        painter->rotate(2 * std::arg(pos) * 180 / PI);
+        }
 }
