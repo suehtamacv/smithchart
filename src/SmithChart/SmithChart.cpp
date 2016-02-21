@@ -43,6 +43,7 @@ void SmithChart::setupInterface()
 void SmithChart::paintEvent(QPaintEvent *)
 {
     auto painter = new QPainter(chartPicture.get());
+    painter->setBackgroundMode(Qt::OpaqueMode);
     painter->translate(chart->rect().center());
 
     drawSmithChart(painter);
@@ -236,10 +237,6 @@ void SmithChart::drawLabels(QPainter *painter)
     painter->rotate(-90);
     for (auto r : labels)
         {
-        QRectF rect(QPointF(0, (r - 1) / (r + 1)) * chartRadius,
-                    QPointF(0, (r - 1) / (r + 1)) * chartRadius);
-        auto br = painter->boundingRect(rect, QString::number(r));
-        painter->fillRect(br, painter->background());
         painter->drawText(QPointF(0, (r - 1) / (r + 1)) * chartRadius +
                           QPointF(0, font.pixelSize()), QString::number(r));
         }
