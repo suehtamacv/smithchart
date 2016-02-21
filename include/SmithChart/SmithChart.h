@@ -3,6 +3,8 @@
 
 #include <complex>
 #include <vector>
+#include <map>
+#include <set>
 #include <memory>
 #include <QLabel>
 #include <QPainter>
@@ -39,6 +41,10 @@ private:
 
     unsigned int chartRadius;
 
+    std::set<std::pair<int, double>> impedanceValues;
+    std::map<double, double> previousImpedance;
+    QPainterPath getImpedanceBoundary(double x);
+
     void setupInterface();
     void paintEvent(QPaintEvent *);
     void resizeEvent(QResizeEvent *);
@@ -46,7 +52,7 @@ private:
     void drawSmithChart(QPainter *painter);
     void drawImpedances(QPainter *painter);
 
-    void povoateChartValues(std::vector<double> &);
+    void povoateChartValues();
 };
 
 #endif // SMITHCHART_H

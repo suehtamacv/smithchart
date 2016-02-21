@@ -2,12 +2,14 @@
 #include "include/GeneralClasses/Impedance.h"
 #include "include/GeneralClasses/Admittance.h"
 #include "include/GeneralClasses/Circle.h"
+#include <algorithm>
 #include <QLayout>
 
 SmithChart::SmithChart(Impedance Z0, QWidget *parent) :
     QWidget(parent), characteristicImpedance(Z0), chartTransformation(Z0)
 {
     setupInterface();
+    povoateChartValues();
 }
 
 SmithChart::SmithChart(Admittance Y0, QWidget *parent) :
@@ -21,12 +23,6 @@ void SmithChart::setupInterface()
     //Window Title and Size
     setWindowTitle("Smith Chart");
     setMinimumSize(400, 400);
-
-    //Window Background
-    setAutoFillBackground(true);
-    QPalette Palette(palette());
-    Palette.setColor(QPalette::Background, Qt::white);
-    setPalette(Palette);
 
     chart = std::make_shared<QLabel>(this);
     chartPicture = std::make_shared<QPicture>();
@@ -46,7 +42,6 @@ void SmithChart::setupInterface()
 void SmithChart::paintEvent(QPaintEvent *)
 {
     auto painter = new QPainter(chartPicture.get());
-
     painter->translate(chart->rect().center());
 
     drawSmithChart(painter);
@@ -79,17 +74,22 @@ void SmithChart::drawSmithChart(QPainter *painter)
     painter->drawPath(chartBoundary);
     painter->setClipPath(chartBoundary);
 
-    std::vector<double> values;
-    povoateChartValues(values);
-
-    for (auto r : values)
+    for (auto pair : impedanceValues)
         {
+        double r = pair.first / 100.0;
+        painter->setClipPath(getImpedanceBoundary(pair.second).subtracted(
+                                 getImpedanceBoundary(previousImpedance.at(pair.second))));
+
         auto circ = Circle(r / (r + 1.0), 1.0 / (r + 1.0)) * chartRadius;
         painter->drawEllipse(QPointF(circ.x(), circ.y()), circ.radius(), circ.radius());
         }
 
-    for (auto x : values)
+    for (auto pair : impedanceValues)
         {
+        double x = pair.first / 100.0;
+        painter->setClipPath(getImpedanceBoundary(pair.second).subtracted(
+                                 getImpedanceBoundary(previousImpedance.at(pair.second))));
+
         if (x == 0)
             {
             continue;
@@ -101,6 +101,7 @@ void SmithChart::drawSmithChart(QPainter *painter)
         painter->drawEllipse(QPointF(circ.x(), circ.y()), circ.radius(), circ.radius());
         }
 
+    painter->setClipPath(chartBoundary);
     painter->drawLine(-chartRadius, 0, chartRadius, 0);
 }
 
@@ -127,47 +128,69 @@ void SmithChart::drawImpedances(QPainter *painter)
         }
 }
 
-void SmithChart::povoateChartValues(std::vector<double> &vals)
+void SmithChart::povoateChartValues()
 {
-    vals.clear();
+    impedanceValues.clear();
+    previousImpedance.clear();
 
-    for (double val = 0; val < 0.2; val += 0.01)
+    previousImpedance = {{.2, -1}, {.5, .2}, {1, .5}, {2, 1}, {5, 2}, {10, 5}, {20, 10}, {50, 20}};
+
+    for (long int var = 0; var <= 20; var += 1)
         {
-        vals.push_back(val);
+        impedanceValues.emplace(var, 0.2);
+        }
+    for (long int var = 0; var <= 50; var += 2)
+        {
+        impedanceValues.emplace(var, 0.5);
+        }
+    for (long int var = 0; var <= 100; var += 5)
+        {
+        impedanceValues.emplace(var, 1.0);
+        }
+    for (long int var = 0; var <= 200; var += 10)
+        {
+        impedanceValues.emplace(var, 2.0);
+        }
+    for (long int var = 0; var <= 500; var += 20)
+        {
+        impedanceValues.emplace(var, 5.0);
+        }
+    for (long int var = 0; var <= 1000; var += 100)
+        {
+        impedanceValues.emplace(var, 10.0);
+        }
+    for (long int var = 0; var <= 2000; var += 500)
+        {
+        impedanceValues.emplace(var, 20.0);
+        }
+    for (long int var = 0; var <= 5000; var += 1000)
+        {
+        impedanceValues.emplace(var, 50.0);
         }
 
-    for (double val = 0.2; val < 0.5; val += 0.02)
+}
+
+QPainterPath SmithChart::getImpedanceBoundary(double x)
+{
+    if (x == -1)
         {
-        vals.push_back(val);
+        return QPainterPath();
         }
 
-    for (double val = 0.5; val < 1.0; val += 0.05)
-        {
-        vals.push_back(val);
-        }
+    QPainterPath chartBoundary;
+    chartBoundary.addEllipse(QPoint(0, 0), chartRadius, chartRadius);
 
-    for (double val = 1.0; val < 2.0; val += 0.1)
-        {
-        vals.push_back(val);
-        }
+    auto impClipPath = chartBoundary;
+    auto circ = Circle(complex(1, - 1.0 / x), 1.0 / x) * chartRadius;
+    impClipPath.addEllipse(QPointF(circ.x(), circ.y()),
+                           circ.radius(), circ.radius());
+    impClipPath.addEllipse(QPointF(circ.x(), -circ.y()),
+                           circ.radius(), circ.radius());
 
-    for (double val = 2.0; val < 5.0; val += 0.2)
-        {
-        vals.push_back(val);
-        }
+    auto reatClipPath = chartBoundary;
+    circ = Circle(x / (x + 1.0), 1.0 / (x + 1.0)) * chartRadius;
+    reatClipPath.addEllipse(QPointF(circ.x(), circ.y()),
+                            circ.radius(), circ.radius());
 
-    for (double val = 5.0; val < 10.0; val += 1.0)
-        {
-        vals.push_back(val);
-        }
-
-    for (double val = 10.0; val < 20.0; val += 2.0)
-        {
-        vals.push_back(val);
-        }
-
-    for (double val = 20.0; val <= 50.0; val += 10.0)
-        {
-        vals.push_back(val);
-        }
+    return impClipPath.intersected(reatClipPath);
 }
