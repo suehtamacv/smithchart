@@ -43,6 +43,7 @@ private:
 
     std::set<std::pair<int, double>> impedanceValues;
     std::map<double, double> previousImpedance;
+    std::map<double, QPainterPath> impedanceBoundaries;
     QPainterPath getImpedanceBoundary(double x);
 
     void setupInterface();

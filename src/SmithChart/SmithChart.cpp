@@ -52,6 +52,7 @@ void SmithChart::paintEvent(QPaintEvent *)
 
 void SmithChart::resizeEvent(QResizeEvent *)
 {
+    impedanceBoundaries.clear();
     auto minSize = std::min(rect().height(), rect().width());
     chart->setMinimumSize(minSize, minSize);
     chartPicture->setBoundingRect(chart->rect());
@@ -177,6 +178,11 @@ QPainterPath SmithChart::getImpedanceBoundary(double x)
         return QPainterPath();
         }
 
+    if (impedanceBoundaries.count(x) != 0)
+        {
+        return impedanceBoundaries.at(x);
+        }
+
     QPainterPath chartBoundary;
     chartBoundary.addEllipse(QPoint(0, 0), chartRadius, chartRadius);
 
@@ -192,5 +198,6 @@ QPainterPath SmithChart::getImpedanceBoundary(double x)
     reatClipPath.addEllipse(QPointF(circ.x(), circ.y()),
                             circ.radius(), circ.radius());
 
+    impedanceBoundaries.emplace(x, impClipPath.intersected(reatClipPath));
     return impClipPath.intersected(reatClipPath);
 }
