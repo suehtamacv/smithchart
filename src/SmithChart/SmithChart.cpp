@@ -73,11 +73,15 @@ void SmithChart::drawSmithChart(QPainter *painter)
     chartRadius =
         std::round(0.45 * std::min(chart->rect().height(), chart->rect().width()));
     QPainterPath chartBoundary(chart->rect().center());
+
+    //Draws the chart Boundary
     chartBoundary.addEllipse(QPoint(0, 0), chartRadius, chartRadius);
 
+    //Everything drawn must be inside the chart boundary.
     painter->drawPath(chartBoundary);
     painter->setClipPath(chartBoundary);
 
+    //Draws the constant-resistance circles.
     for (auto pair : impedanceValues)
         {
         double r = pair.first / 100.0;
@@ -88,6 +92,7 @@ void SmithChart::drawSmithChart(QPainter *painter)
         painter->drawEllipse(QPointF(circ.x(), circ.y()), circ.radius(), circ.radius());
         }
 
+    //Draws the constant-reactance circles.
     for (auto pair : impedanceValues)
         {
         double x = pair.first / 100.0;
@@ -106,6 +111,8 @@ void SmithChart::drawSmithChart(QPainter *painter)
         }
 
     painter->setClipPath(chartBoundary);
+
+    //Draws the special "circle" corresponding to r = 0
     painter->drawLine(-chartRadius, 0, chartRadius, 0);
 }
 
@@ -139,6 +146,10 @@ void SmithChart::povoateChartValues()
 
     previousImpedance = {{.2, -1}, {.5, .2}, {1, .5}, {2, 1}, {5, 2}, {10, 5}, {20, 10}, {50, 20}};
 
+    //The map relates the radii of the circles drawn in the Smith Chart (multiplied
+    //by a factor of 100), together with up to what radius the circle must extend.
+    //For example, the circle with resistance "0.17" (17) must extend up to the
+    //circle of reactance 0.2
     for (long int var = 0; var <= 20; var += 1)
         {
         impedanceValues.emplace(var, 0.2);
@@ -176,6 +187,8 @@ void SmithChart::povoateChartValues()
 
 QPainterPath SmithChart::getImpedanceBoundary(double x)
 {
+    //This function returns the area of the Smith Chart where the required circle
+    //must be drawn.
     if (x == -1)
         {
         return QPainterPath();
