@@ -4,7 +4,7 @@
 #include <complex>
 #include <vector>
 
-#define PI 3.141592653589793238462643383279502884L
+#define PI 3.141592653589793238462643383279502884
 
 typedef std::complex<double> complex;
 

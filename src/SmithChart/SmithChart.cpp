@@ -4,6 +4,7 @@
 #include "include/GeneralClasses/Circle.h"
 #include <algorithm>
 #include <QLayout>
+#include <QResizeEvent>
 
 SmithChart::SmithChart(Impedance Z0, QWidget *parent) :
     QWidget(parent), characteristicImpedance(Z0), chartTransformation(Z0)
@@ -22,17 +23,17 @@ void SmithChart::setupInterface()
 {
     //Window Title and Size
     setWindowTitle("Smith Chart");
-    setMinimumSize(400, 400);
+    setFixedSize(700, 700);
 
     chart = std::make_shared<QLabel>(this);
     chartPicture = std::make_shared<QPicture>();
     chart->setContentsMargins(0, 0, 0, 0);
     chart->setPicture(*chartPicture);
-    chart->setSizePolicy(QSizePolicy::MinimumExpanding,
-                         QSizePolicy::MinimumExpanding);
+    chart->setSizePolicy(QSizePolicy::Expanding,
+                         QSizePolicy::Expanding);
 
     auto HLayout = new QHBoxLayout(this);
-    HLayout->addWidget(chart.get(), 0, Qt::AlignCenter);
+    HLayout->addWidget(chart.get());
     HLayout->setContentsMargins(0, 0, 0, 0);
     setLayout(HLayout);
 
@@ -46,6 +47,7 @@ void SmithChart::paintEvent(QPaintEvent *)
 
     drawSmithChart(painter);
     drawImpedances(painter);
+    drawLabels(painter);
 
     delete painter;
 }
@@ -53,6 +55,7 @@ void SmithChart::paintEvent(QPaintEvent *)
 void SmithChart::resizeEvent(QResizeEvent *)
 {
     impedanceBoundaries.clear();
+
     auto minSize = std::min(rect().height(), rect().width());
     chart->setMinimumSize(minSize, minSize);
     chartPicture->setBoundingRect(chart->rect());
@@ -178,7 +181,7 @@ QPainterPath SmithChart::getImpedanceBoundary(double x)
         return QPainterPath();
         }
 
-    if (impedanceBoundaries.count(x) != 0)
+    if (impedanceBoundaries.count(x))
         {
         return impedanceBoundaries.at(x);
         }
@@ -200,4 +203,32 @@ QPainterPath SmithChart::getImpedanceBoundary(double x)
 
     impedanceBoundaries.emplace(x, impClipPath.intersected(reatClipPath));
     return impClipPath.intersected(reatClipPath);
+}
+
+void SmithChart::drawLabels(QPainter *painter)
+{
+    painter->setRenderHint(QPainter::Antialiasing, true);
+    painter->setClipping(false);
+
+    painter->drawEllipse(QPointF(0, 0), chartRadius * 1.1, chartRadius * 1.1);
+
+    QFont font = painter->font();
+    font.setPixelSize(8);
+    painter->setFont(font);
+
+    double labels[] = {0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2,
+                       1.4, 1.6, 1.8, 2.0, 3.0, 4.0, 5.0, 10.0, 20.0, 50.0
+                      };
+
+    painter->rotate(-90);
+    for (auto r : labels)
+        {
+        QRectF rect(QPointF(0, (r - 1) / (r + 1)) * chartRadius,
+                    QPointF(0, (r - 1) / (r + 1)) * chartRadius);
+        auto br = painter->boundingRect(rect, QString::number(r));
+        painter->fillRect(br, painter->background());
+        painter->drawText(QPointF(0, (r - 1) / (r + 1)) * chartRadius +
+                          QPointF(0, font.pixelSize()), QString::number(r));
+        }
+    painter->rotate(90);
 }

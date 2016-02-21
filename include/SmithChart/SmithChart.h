@@ -52,6 +52,7 @@ private:
 
     void drawSmithChart(QPainter *painter);
     void drawImpedances(QPainter *painter);
+    void drawLabels(QPainter *painter);
 
     void povoateChartValues();
 };
