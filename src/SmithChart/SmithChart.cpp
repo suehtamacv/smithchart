@@ -11,12 +11,28 @@ SmithChart::SmithChart(Impedance Z0, QWidget *parent) :
 {
     setupInterface();
     povoateChartValues();
+    drawChart();
+
+    connect(this, SIGNAL(redraw()), this, SLOT(drawChart()));
 }
 
 SmithChart::SmithChart(Admittance Y0, QWidget *parent) :
     SmithChart(Y0.toImpedance(), parent)
 {
 
+}
+
+void SmithChart::drawChart()
+{
+    auto painter = std::make_shared<QPainter>(chartPicture.get());
+
+    painter->setBackgroundMode(Qt::OpaqueMode);
+    painter->translate(chart->rect().center());
+    painter->setRenderHint(QPainter::Antialiasing, true);
+
+    drawSmithChart(painter);
+    drawLabels(painter);
+    drawImpedances(painter);
 }
 
 void SmithChart::setupInterface()
@@ -37,20 +53,11 @@ void SmithChart::setupInterface()
     HLayout->setContentsMargins(0, 0, 0, 0);
     setLayout(HLayout);
 
+    auto minSize = std::min(rect().height(), rect().width());
+    chart->setMinimumSize(minSize, minSize);
+    chartPicture->setBoundingRect(chart->rect());
+
     show();
-}
-
-void SmithChart::paintEvent(QPaintEvent *)
-{
-    auto painter = new QPainter(chartPicture.get());
-    painter->setBackgroundMode(Qt::OpaqueMode);
-    painter->translate(chart->rect().center());
-
-    drawSmithChart(painter);
-    drawImpedances(painter);
-    drawLabels(painter);
-
-    delete painter;
 }
 
 void SmithChart::resizeEvent(QResizeEvent *)
@@ -60,15 +67,12 @@ void SmithChart::resizeEvent(QResizeEvent *)
     auto minSize = std::min(rect().height(), rect().width());
     chart->setMinimumSize(minSize, minSize);
     chartPicture->setBoundingRect(chart->rect());
+
+    emit drawChart();
 }
 
-void SmithChart::drawSmithChart(QPainter *painter)
+void SmithChart::drawSmithChart(std::shared_ptr<QPainter> painter)
 {
-    if (!painter)
-        {
-        return;
-        }
-
     painter->setRenderHint(QPainter::Antialiasing, true);
 
     chartRadius =
@@ -120,6 +124,7 @@ void SmithChart::drawSmithChart(QPainter *painter)
 void SmithChart::drawImpedance(const Impedance &impedance)
 {
     drawnImpedances.push_back(Impedance(impedance));
+    emit drawChart();
 }
 
 void SmithChart::drawAdmittance(const Admittance &admittance)
@@ -127,17 +132,19 @@ void SmithChart::drawAdmittance(const Admittance &admittance)
     drawImpedance(admittance.toImpedance());
 }
 
-void SmithChart::drawImpedances(QPainter *painter)
+void SmithChart::drawImpedances(std::shared_ptr<QPainter> painter)
 {
-    painter->setRenderHint(QPainter::Antialiasing, true);
+    auto brush = painter->brush();
 
+    painter->setBrush(QBrush(Qt::black));
     for (auto &impedance : drawnImpedances)
         {
         auto z = chartTransformation.findPoint(impedance);
         z *= chartRadius;
 
-        painter->drawPoint(QPoint(z.real(), z.imag()));
+        painter->drawEllipse(QPointF(z.real(), z.imag()), 2.5, 2.5);
         }
+    painter->setBrush(brush);
 }
 
 void SmithChart::povoateChartValues()
@@ -219,9 +226,8 @@ QPainterPath SmithChart::getImpedanceBoundary(double x)
     return impClipPath.intersected(reatClipPath);
 }
 
-void SmithChart::drawLabels(QPainter *painter)
+void SmithChart::drawLabels(std::shared_ptr<QPainter> painter)
 {
-    painter->setRenderHint(QPainter::Antialiasing, true);
     painter->setClipping(false);
 
     painter->drawEllipse(QPointF(0, 0), chartRadius * 1.06, chartRadius * 1.06);
@@ -259,4 +265,6 @@ void SmithChart::drawLabels(QPainter *painter)
         painter->drawText(QPointF(1.01 * chartRadius, 0), QString::number(x));
         painter->rotate(2 * std::arg(pos) * 180 / PI);
         }
+
+    painter->setClipping(true);
 }

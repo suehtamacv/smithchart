@@ -47,14 +47,20 @@ private:
     QPainterPath getImpedanceBoundary(double x);
 
     void setupInterface();
-    void paintEvent(QPaintEvent *);
     void resizeEvent(QResizeEvent *);
 
-    void drawSmithChart(QPainter *painter);
-    void drawImpedances(QPainter *painter);
-    void drawLabels(QPainter *painter);
+    void drawSmithChart(std::shared_ptr<QPainter> painter);
+    void drawImpedances(std::shared_ptr<QPainter> painter);
+    void drawLabels(std::shared_ptr<QPainter> painter);
 
     void povoateChartValues();
+
+private slots:
+    void drawChart();
+
+signals:
+    void redraw();
+
 };
 
 #endif // SMITHCHART_H
