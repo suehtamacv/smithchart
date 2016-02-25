@@ -30,6 +30,8 @@ public:
     void drawImpedance(const Impedance &impedance);
     void drawAdmittance(const Admittance &admittance);
 
+    void setCharacteristicImpedance(Impedance &impedance);
+
 private:
     Impedance characteristicImpedance;
     SmithChartTransformation chartTransformation;

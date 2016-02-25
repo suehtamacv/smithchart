@@ -56,8 +56,6 @@ void SmithChart::setupInterface()
     auto minSize = std::min(rect().height(), rect().width());
     chart->setMinimumSize(minSize, minSize);
     chartPicture->setBoundingRect(chart->rect());
-
-    show();
 }
 
 void SmithChart::resizeEvent(QResizeEvent *)
@@ -67,6 +65,13 @@ void SmithChart::resizeEvent(QResizeEvent *)
     auto minSize = std::min(rect().height(), rect().width());
     chart->setMinimumSize(minSize, minSize);
     chartPicture->setBoundingRect(chart->rect());
+
+    emit drawChart();
+}
+
+void SmithChart::setCharacteristicImpedance(Impedance &impedance)
+{
+    characteristicImpedance = impedance;
 
     emit drawChart();
 }
