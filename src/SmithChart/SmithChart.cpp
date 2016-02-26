@@ -4,7 +4,6 @@
 #include "include/GeneralClasses/Circle.h"
 #include <algorithm>
 #include <QLayout>
-#include <QResizeEvent>
 
 SmithChart::SmithChart(Impedance Z0, QWidget *parent) :
     QWidget(parent), characteristicImpedance(Z0), chartTransformation(Z0)
@@ -37,8 +36,7 @@ void SmithChart::drawChart()
 
 void SmithChart::setupInterface()
 {
-    //Window Title and Size
-    setWindowTitle("Smith Chart");
+    //Window Size
     setFixedSize(700, 700);
 
     chart = std::make_shared<QLabel>(this);
