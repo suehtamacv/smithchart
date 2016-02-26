@@ -1,12 +1,10 @@
 #ifndef CIRCLE_H
 #define CIRCLE_H
 
-#include <complex>
+#include "Complex.h"
 #include <vector>
 
 #define PI 3.141592653589793238462643383279502884
-
-typedef std::complex<double> complex;
 
 class Circle
 {

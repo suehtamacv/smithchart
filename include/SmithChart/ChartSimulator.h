@@ -5,6 +5,8 @@
 #include "SmithChart.h"
 
 class QHBoxLayout;
+class QVBoxLayout;
+class ImpedanceLineInput;
 
 class ChartSimulator : public QWidget
 {
@@ -15,8 +17,12 @@ private:
     std::shared_ptr<SmithChart> chart;
 
     std::shared_ptr<QHBoxLayout> widgetLayout;
+    std::shared_ptr<QVBoxLayout> sidebarLayout;
+
+    std::shared_ptr<ImpedanceLineInput> characteristicImpedance;
 
     void setupInterface();
+    void setSidebar();
 };
 
 #endif // CHARTSIMULATOR_H

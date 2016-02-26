@@ -1,12 +1,10 @@
 #ifndef MOEBIUSTRANSFORMATION_H
 #define MOEBIUSTRANSFORMATION_H
 
-#include <complex>
+#include "../GeneralClasses/Complex.h"
 
 class Impedance;
 class Admittance;
-
-typedef std::complex<double> complex;
 
 /**
  * @brief The MoebiusTransformation class represents a Möbius Transformation.

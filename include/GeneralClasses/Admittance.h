@@ -1,9 +1,7 @@
 #ifndef ADMITTANCE_H
 #define ADMITTANCE_H
 
-#include <complex>
-
-typedef std::complex<double> complex;
+#include "Complex.h"
 
 class Impedance;
 

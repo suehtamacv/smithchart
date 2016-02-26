@@ -1,7 +1,6 @@
 #ifndef SMITHCHART_H
 #define SMITHCHART_H
 
-#include <complex>
 #include <vector>
 #include <map>
 #include <set>
@@ -16,8 +15,6 @@
 
 class Admitttance;
 class Circle;
-
-typedef std::complex<double> complex;
 
 class SmithChart : public QWidget
 {

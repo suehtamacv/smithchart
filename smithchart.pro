@@ -21,7 +21,9 @@ HEADERS += \
     include/MoebiusTranformations/MoebiusTransformation.h \
     include/MoebiusTranformations/SmithChartTransformation.h \
     include/SmithChart/SmithChart.h \
-    include/SmithChart/ChartSimulator.h
+    include/SmithChart/ChartSimulator.h \
+    include/GeneralClasses/ImpedanceLineInput.h \
+    include/GeneralClasses/Complex.h
 
 SOURCES += \
     main.cpp \
@@ -31,7 +33,8 @@ SOURCES += \
     src/MoebiusTranformations/MoebiusTransformation.cpp \
     src/MoebiusTranformations/SmithChartTransformation.cpp \
     src/SmithChart/SmithChart.cpp \
-    src/SmithChart/ChartSimulator.cpp
+    src/SmithChart/ChartSimulator.cpp \
+    src/GeneralClasses/ImpedanceLineInput.cpp
 
 OTHER_FILES += \
     .astylerc
