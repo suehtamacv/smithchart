@@ -32,6 +32,8 @@ void ChartSimulator::setupInterface()
 void ChartSimulator::setSidebar()
 {
     characteristicImpedance = std::make_shared<ImpedanceLineInput>();
+    connect(characteristicImpedance.get(), SIGNAL(valueChanged(Impedance)),
+            chart.get(), SLOT(setCharacteristicImpedance(Impedance&)));
     sidebarLayout->addWidget(new QLabel("Characteristic Impedance", this));
     sidebarLayout->addLayout(characteristicImpedance.get());
     sidebarLayout->addStretch();

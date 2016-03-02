@@ -70,7 +70,6 @@ void SmithChart::resizeEvent(QResizeEvent *)
 void SmithChart::setCharacteristicImpedance(Impedance &impedance)
 {
     characteristicImpedance = impedance;
-
     emit drawChart();
 }
 

@@ -2,6 +2,7 @@
 #define IMPEDANCELINEINPUT_H
 
 #include "Complex.h"
+#include "Impedance.h"
 #include <QHBoxLayout>
 #include <QDoubleSpinBox>
 #include <QLabel>
@@ -12,14 +13,19 @@ class ImpedanceLineInput : public QHBoxLayout
 {
 public:
     ImpedanceLineInput(QWidget *parent = 0);
+    Impedance getValue();
 
-    complex getValue();
+signals:
+    void valueChanged(Impedance);
 
 private:
-    std::unique_ptr<QDoubleSpinBox> Resistance;
-    std::unique_ptr<QDoubleSpinBox> Reactance;
-    std::unique_ptr<QLabel> LabelP;
-    std::unique_ptr<QLabel> LabelOhm;
+    std::shared_ptr<QDoubleSpinBox> Resistance;
+    std::shared_ptr<QDoubleSpinBox> Reactance;
+    std::shared_ptr<QLabel> LabelP;
+    std::shared_ptr<QLabel> LabelOhm;
+
+private slots:
+    void emitValueChanged();
 };
 
 #endif // IMPEDANCELINEINPUT_H

@@ -20,6 +20,9 @@ class SmithChart : public QWidget
 {
     Q_OBJECT
 
+signals:
+    void redraw();
+
 public:
     SmithChart(Impedance Z0, QWidget *parent = 0);
     SmithChart(Admittance Y0, QWidget *parent = 0);
@@ -27,6 +30,7 @@ public:
     void drawImpedance(const Impedance &impedance);
     void drawAdmittance(const Admittance &admittance);
 
+public slots:
     void setCharacteristicImpedance(Impedance &impedance);
 
 private:
@@ -56,10 +60,6 @@ private:
 
 private slots:
     void drawChart();
-
-signals:
-    void redraw();
-
 };
 
 #endif // SMITHCHART_H
